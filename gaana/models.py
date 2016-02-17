@@ -10,21 +10,34 @@ class MyUser(models.Model):
     first_name = models.CharField("first_name", max_length=30, blank=False)
     last_name = models.CharField("last_name", max_length=30, blank=False)
     date_of_birth = models.DateField(blank=False)
-    city = models.CharField(max_length=60, null=True)
-    state_province = models.CharField(max_length=30, null=True)
-    country = models.CharField(max_length=50, null=True)
 
     def __unicode__(self):
         return u'%s' %(self.user)
 
-class Song(models.Model):
-    artist = models.CharField(max_length=30)
-    album = models.CharField(max_length=30)
-    title = models.CharField(max_length=30)
-    genre = models.CharField(max_length=30)
-    size = models.IntegerField(blank=True, default=0)
 
-    def __unicode__(self):
-        return u'%s' %(self.artist)
+class Artist(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+
+
+class Album(models.Model):
+    artist = models.ForeignKey(Artist)
+    name = models.CharField(max_length=100)
+    year = models.IntegerField(default=0)
+    num_stars = models.IntegerField()
+
+    class Meta:
+        unique_together = ("name", "artist")
+
+
+class Track(models.Model):
+    name = models.CharField(max_length=200)
+    artist = models.ForeignKey(Artist)
+    album = models.ForeignKey(Album)
+    track_no = models.IntegerField(default=0)
+
+
+class Playlist(models.Model):
+    name = models.CharField(max_length=200)
+    pid = models.CharField(max_length=200)
 
 

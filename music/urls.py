@@ -5,7 +5,7 @@ from gaana import views
 urlpatterns = [
     url(r'^sign-up/$', views.sign_up, name='sign_up'),
     url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
-    url(r'^login/$', views.logout_page, name='logout_page'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout_page'),
     url(r'^home/$', views.home, name='home'),
     url(r'^admin/', include(admin.site.urls)),
 ]
