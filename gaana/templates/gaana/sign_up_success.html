@@ -1,0 +1,12 @@
+<form action="." method="post">
+    {% csrf_token %}
+    {% block title %}Registration Successful.{% endblock %}
+    <br>
+    {% block head %}
+    Registration Completed Successfully.
+    {% endblock %}</br>
+    <br>
+    {% block content %}
+    Thank you for registering.
+    <a href='/login/'>Login</a>
+    {% endblock %}</br>

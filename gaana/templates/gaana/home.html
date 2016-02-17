@@ -1,0 +1,14 @@
+{% block title %}Welcome to Gaana{% endblock %}
+{% block content %}
+{% csrf_token %}
+{% if user.is_authenticated %}
+<p>Welcome {{ user.get_username }}. Thanks for logging in.</p>
+<a href="/music/">Browse your favourite Music</a>
+<br>
+<a href="/login/">Logout</a>
+</br>
+{% else %}
+<p>Welcome, new user. Please Sign Up to browse your favourite Music.</p>
+<a href="/sign-up/">Register</a>
+{% endif %}
+{% endblock %}
