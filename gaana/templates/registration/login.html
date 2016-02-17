@@ -1,6 +1,6 @@
-{% block title %}Login{% endblock %}
-<br>
-{% block head %}Login Details{% endblock %}</br>
+<h1>{% block title %}Sign In To <a href='/home/'>Gaana</a>{% endblock %}</h1>
+<p><strong><br>
+{% block head %}Please Enter Your Login Details Below:{% endblock %}</br></strong></p>
 {% block content %}
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
@@ -10,8 +10,7 @@
         <tr><th><label for="id_username">Username:</label></th><td>{{ form.username }}</td></tr>
         <tr><th><label for="id_password">Password:</label></th><td>{{ form.password }}</td></tr>
     </table>
-    <input type="submit" value="Login" />
+    <input type="submit" value="Sign In" />
     <input type="hidden" name="next" value="/home/" />
 </form>
-<a href="/sign-up/">Sign Up</a>
 {% endblock %}

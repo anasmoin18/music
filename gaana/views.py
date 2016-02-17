@@ -24,12 +24,12 @@ def sign_up(request):
 
 @csrf_protect
 def login(request):
-    return render_to_response('gaana/login.html', { 'user': request.user })
+    return render_to_response('registration/login.html', { 'user': request.user })
 
 @csrf_protect
 def logout_page(request):
     logout(request)
-    return HttpResponseRedirect('/login/')
+    return HttpResponseRedirect('/home/')
 
 
 @csrf_protect

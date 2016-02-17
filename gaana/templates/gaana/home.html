@@ -1,14 +1,17 @@
-{% block title %}Welcome to Gaana{% endblock %}
+<h1>{% block title %}Welcome To Gaana. Listen To Free Music Online.{% endblock %}</h1>
 {% block content %}
 {% csrf_token %}
 {% if user.is_authenticated %}
-<p>Welcome {{ user.get_username }}. Thanks for logging in.</p>
-<a href="/music/">Browse your favourite Music</a>
+<p><strong>Welcome {{ user.get_username }}. Thanks For Logging In.</strong></p>
+<br><a href="/music/">Browse Your Favourite Music</a></br>
 <br>
 <a href="/login/">Logout</a>
 </br>
 {% else %}
-<p>Welcome, new user. Please Sign Up to browse your favourite Music.</p>
-<a href="/sign-up/">Register</a>
+<p><strong>Welcome New User. Please Sign Up to browse your favourite Music.</strong></p>
+<a href="/sign-up/">Sign Up</a>
+
+<p><strong>Existing Users, Please login to enjoy your favourite Music.</strong></p>
+<a href='/login/'>Sign In</a>
 {% endif %}
 {% endblock %}
