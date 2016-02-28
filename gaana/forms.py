@@ -1,6 +1,23 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from gaana.models import Artist, Album, Track, Playlist
+
+class StringObjectField(forms.CharField):
+    """Converts a string to the appropriate (presumably artist/album) object"""
+
+    def __init__(self, model, *args, **kwargs):
+        self.model = model
+        forms.CharField.__init__(self, *args, **kwargs)
+
+    def to_python(self, value):
+        value = super(forms.CharField, self).to_python(value)
+        return getObj(self.model, value)
+
+    def clean(self, value):
+        if not isinstance(value, self.model):
+            return getObj(self.model, value)
+        return value
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(label='First Name', max_length=30)
@@ -31,3 +48,12 @@ class SignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class SongForm(forms.ModelForm):
+    artist = StringObjectField(Artist, max_length=300)
+    album = StringObjectField(Album, max_length=300)
+    track = StringObjectField(Track, max_length=300)
+    playlist = StringObjectField(Playlist, max_length=300)
+    class Meta:
+        model = User
+        fields = ["artist", "album", "track", "playlist"]

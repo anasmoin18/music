@@ -1,10 +1,10 @@
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.exceptions import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth import logout, login
 from gaana.models import *
-from forms import SignUpForm
+from forms import *
 
 
 def home(request):
@@ -41,12 +41,13 @@ def albums(request):
                               {'list': albums, 'view':'album'},
                               context_instance=RequestContext(request))
 
-def artist(request,artist_id):
-    artist = Artist.objects.get(id=artist_id)
-    albums = Album.objects.filter(artist=artist)
-    return render_to_response('gaana/index.html',
-                              {'list': albums, 'view':'album', 'artist': artist},
-                              context_instance=RequestContext(request))
+def artist(request, artist_id=None):
+    try:
+        artist = Artist.objects.get(id=artist_id)
+    except Artist.DoesNotExist:
+        raise Http404
+    songs = Song.objects.select_related("artist", "album").check_playable(request.user).filter(artist=artist).order_by("album__name", "track")
+    return render_to_response("gaana/artist.html", {'songs': songs, 'artist': artist}, context_instance=RequestContext(request))
 
 def playlists(request):
     playlists = Playlist.objects.all()
@@ -61,12 +62,13 @@ def playlist(request,playlist_id):
                               {'playlist': playlist, 'tracks': tracks, 'view': 'single_playlist'},
                               context_instance=RequestContext(request))
 
-def album(request,album_id):
-    album = Album.objects.get(id=album_id)
-    tracks = Track.objects.filter(album=album).order_by('track_no')
-    return render_to_response('gaana/album.html',
-                              {'album': album, 'tracks': tracks, 'view': 'single_album'},
-                              context_instance=RequestContext(request))
+def album(request, album_id=None):
+    try:
+        album = Album.objects.select_related().get(id=album_id)
+    except Album.DoesNotExist:
+        raise Http404
+    songs = album.songs.all().check_playable(request.user).select_related().order_by('track')
+    return render_to_response('gaana/album.html', {'album': album, 'songs': songs}, context_instance=RequestContext(request))
 
 def logout_page(request):
     logout(request)
